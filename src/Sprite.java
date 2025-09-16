@@ -65,7 +65,7 @@ public class Sprite {
      */
     public boolean collide(Sprite other) {
         Rectangle thisR = new Rectangle(x, y, size, size);
-        Rectangle otherR = new Rectangle(x, y, size, size);
+        Rectangle otherR = new Rectangle(other.x, other.y, other.size, other.size);
         return thisR.intersects(otherR);
     }
 

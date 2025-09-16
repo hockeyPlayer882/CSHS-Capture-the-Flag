@@ -1,4 +1,3 @@
-
 //imports for graphics and linked lists
 import java.awt.*;
 import javax.swing.*;
@@ -45,7 +44,7 @@ public class Main extends JPanel {
 
         // 1st paint
         frame.repaint();
-        PlayerLogic.instantiateTeams();
+        Player.instantiateTeams();
 
         for (PlayerLogic p : PlayerLogic.yourTeam)
             System.out.println(p);

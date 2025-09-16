@@ -8,5 +8,4 @@ public class Flag extends Sprite {
         // sets all the properties for Sprite
         super(true, new Color(0, 0, 0), x, y, size, "Flag");
     }
-
 }
