@@ -34,7 +34,7 @@ public class Main extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //1st paint
         frame.repaint();
-        PlayerLogic.instantiateTeams();
+        Player.instantiateTeams();
         for(PlayerLogic p : PlayerLogic.yourTeam) System.out.println(p);
         for(PlayerLogic e : PlayerLogic.enemyTeam) System.out.println(e);
     }
