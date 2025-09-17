@@ -44,7 +44,8 @@ public class Sprite {
             } catch (IOException e) {
                 System.out.println("File with name: " + imageName + "does not exist in the images folder");
                 e.printStackTrace();
-                // TODO: Should crash here or otherwise handles this non-transparently for the devs.
+                //I don't know my exit codes, just picked an arbitrary non-zero number
+                System.exit(3);
             }
         }
 

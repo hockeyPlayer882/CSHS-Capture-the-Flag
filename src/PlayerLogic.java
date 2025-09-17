@@ -1,17 +1,46 @@
 /*
  * You will only be writing code in this class, DO NOT MESS WITH ANY OTHER CLASSES, if there's an issue that you believe is not related to your code, email 
  * Michael Middendorf and I will determine what the issue is.
- */  
-public class PlayerLogic extends Player{
+ */
+//I could be mean and force everyone to search through the Player code to find all the stuff you have access to, but becuase I'm feeling nice I'll list them here...
+//Player properties:
+//      X,Y,rotation (all ints)
+//      playerSpeed,playerSize (constant ints)
+//      isMoving,isRed,hasFlag (all booleans, by default isMoving is false, so you have to set it to true if you want them to move, which they will do automatically)
+//Flag properties:
+//      X,Y (all ints)
+//      isCollected,isRed (constant ints)
+//      size(constant int)
+public class PlayerLogic extends Player {
     public static PlayerLogic[] yourTeam = new PlayerLogic[5];
     public static PlayerLogic[] enemyTeam = new PlayerLogic[5];
-    
-    public PlayerLogic(int x, int y, boolean isRed, int direction){
-        super(x, y, isRed, direction);
-    } 
 
     /**
-     * Write your movement logic here....
+     * generates a player with logic
      * 
+     * @param x         x position
+     * @param y         y position
+     * @param isRed     is it red or not?
+     * @param direction starting rotation
      */
+    public PlayerLogic(int x, int y, boolean isRed, int direction) {
+        super(x, y, isRed, direction);
+    }
+    /**
+     * Write your movement logic here....
+     */
+    /**
+     * This update method is called every frame, use it
+     * Keep in mind that move is already called every frame, so you can NOT use it here, since you will get your move speed doubled
+     */
+    public void Update(){
+        //testing cases
+        yourTeam[1].pointToDir(30);
+        yourTeam[2].pointToDir(13);
+        yourTeam[0].isMoving = true;
+        yourTeam[1].isMoving = true;
+        yourTeam[2].isMoving = true;
+        yourTeam[3].isMoving = true;
+    }
+
 }

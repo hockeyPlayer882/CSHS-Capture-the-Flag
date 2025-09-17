@@ -1,11 +1,43 @@
-import java.awt.Color;
-
 //flag is a sprite (If you're curious, this is inheritance, basically it makes flag keep all of the )
 public class Flag extends Sprite {
     public static final int size = PlayerLogic.playerSize;
-
+    public boolean isCollected = false;
+    public boolean isRed;
+    public boolean isDropped = false;
+    //3 seconds to collect flag after it's dropped
+    public int MResetTimer = 180;
+    //if 0, flag is reset
+    public Timer resetTimer = new Timer(0,3,0,3);
+    /**
+     * Constructs a flag object
+     * @param x x position
+     * @param y y position
+     * @param isRed is it red or not?
+     */
     public Flag(int x, int y, boolean isRed) {
         // sets all the properties for Sprite
-        super(true, new Color(0, 0, 0), x, y, size, "Flag");
+        super(true, isRed ? Player.redColor : Player.blueColor, x, y, size, isRed ? "redFlag":"blueFlag");
+        //nobody can collect the flag at the start
+        isCollected = false;
+        this.isRed = isRed;
+    }
+    /**
+     * checks if enemy team collected a flag, sets the flag isCollected if it is
+     * @return true if they collected it, false otherwise
+     */
+    public boolean checkCollected(){
+        //if the flag was collected before, that doesn't mean it's collected now...
+        isCollected = false;
+        //figure out who's flag current flag is
+        if(PlayerLogic.enemyTeam[0].isRed == isRed)
+            //if it's the enemies' teams flag... loop through each player on your team and check for a collision
+            for(PlayerLogic p : PlayerLogic.yourTeam)
+                isCollected = p.collide(this) ? true:isCollected;
+        else
+            //if it's your flag.... loop through each player on the enemies' team and check for a collision
+            for(PlayerLogic p : PlayerLogic.enemyTeam)
+                isCollected = p.collide(this) ? true:isCollected;
+        return isCollected;
+        
     }
 }
