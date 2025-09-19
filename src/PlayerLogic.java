@@ -39,7 +39,7 @@ public class PlayerLogic extends Player {
      */
     public void Update(){
         //testing cases
-        yourTeam[1].setRotation(30);
+        yourTeam[1].setRotation(-30);
         //spin?
         yourTeam[0].isMoving = true;
         yourTeam[1].isMoving = true;
