@@ -11,11 +11,11 @@ public class Player extends Sprite {
     // for the sake of simplicity, degrees will be for rotation (360), by default
     // for trig, radians are used, but radians are more confusing to use and
     // conversions exist if needed
-    public int rotation = 0;
+    private int rotation = 0;
     // for smooth rotation
-    public int setRotation = 0;
+    private int setRotation = 0;
     // how fast should they turn?
-    public int rotationStep = 5;
+    private int rotationStep = 5;
     public boolean hasFlag = false;
     boolean isRed;
 
@@ -42,26 +42,38 @@ public class Player extends Sprite {
      */
     public void move() {
         if (isMoving) {
-            if (setRotation != 0) {
-                rotation += setRotation > 0 ? rotationStep : -rotationStep;
-                setRotation -= setRotation > 0 ? rotationStep : -rotationStep;
-            }
             x += playerSpeed * Math.cos(Math.toRadians(rotation));
             y += playerSpeed * Math.sin(Math.toRadians(rotation));
         }
     }
-
+    public int getRotation(){
+        return rotation;
+    }
     /**
      * tells the program to point to a specified new angle (again in degrees)
      * 
      * @param newAngle the new angle you want the player to point to
      */
-    public void pointToDir(int newAngle) {
-        // so weird thing about how angles are implemented here, for some reason it's
-        // backwards, so I need an extra negative here...
-        setRotation = -newAngle - rotation;
+    public void setRotation(int newAngle) {
+        rotation = newAngle;
     }
-
+    public void pointAtSprite(Sprite other){
+        //if they are on the same x-axis, point straight up or down
+        if(x == other.x){
+            setRotation(y > other.y ? 90:270);
+            return;
+        }
+        //if they are on the same y-axis, point straight left or right
+        if(y == other.y){
+            setRotation(x > other.x ? 180:0);
+            return;
+       }
+       System.out.println("x: " + x + "y: " + y);
+       System.out.println("otherX: " + other.x + ". otherY: " + other.y);
+        double theta = Math.toDegrees(Math.atan((other.y-y)/(other.x-x)));
+        System.out.println(theta);
+        setRotation((int)theta);
+    }
     /**
      * Calculates the x points of the triangle
      * 
@@ -124,7 +136,6 @@ public class Player extends Sprite {
      */
     public static void instantiateTeams() {
         boolean youAreRed = (int) (Math.random() * 2) == 0;
-        System.out.println(youAreRed);
         // Separate players by a fifth of the frame resolution.
         final int playerDelta = Main.frameHeight / 5;
 
@@ -132,6 +143,17 @@ public class Player extends Sprite {
             PlayerLogic.yourTeam[i] = new PlayerLogic(120, i * playerDelta + playerDelta / 2, youAreRed, 0);
             PlayerLogic.enemyTeam[i] = new PlayerLogic(Main.frameWidth - 120, i * playerDelta + playerDelta / 2,
                     !youAreRed, 180);
+        }
+        //moves the flags to the correct position
+        final int offset = 50;
+        if(youAreRed){
+            Main.redFlag.x =offset;
+            Main.blueFlag.x = Main.frameWidth-offset; 
+        }
+        else{
+
+            Main.blueFlag.x =offset;
+            Main.redFlag.x = Main.frameWidth-offset; 
         }
     }
 

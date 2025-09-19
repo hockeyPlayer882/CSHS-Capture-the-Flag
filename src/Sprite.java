@@ -40,9 +40,9 @@ public class Sprite {
             try {
                 // get the path to the image (imageName must match the name in the Images
                 // folder)
-                image = ImageIO.read(new File("./Images" + imageName));
+                image = ImageIO.read(new File("./src/Images/" + imageName + ".png"));
             } catch (IOException e) {
-                System.out.println("File with name: " + imageName + "does not exist in the images folder");
+                System.out.println("File with name: " + imageName + " does not exist in the Images folder");
                 e.printStackTrace();
                 //I don't know my exit codes, just picked an arbitrary non-zero number
                 System.exit(3);
@@ -91,7 +91,7 @@ public class Sprite {
      * @param m main instance
      */
     protected void draw(Graphics g, Main m) {
-        g.drawImage(null, 0, 0, m);
+        g.drawImage(image, x, y, m);
     }
 
     /**
