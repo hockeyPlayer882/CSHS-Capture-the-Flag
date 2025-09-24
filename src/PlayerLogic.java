@@ -39,14 +39,20 @@ public class PlayerLogic extends Player {
      */
     public void Update(){
         //testing cases
-        yourTeam[1].setRotation(-30);
+        yourTeam[1].setRotation(30);
         //spin?
         yourTeam[0].isMoving = true;
         yourTeam[1].isMoving = true;
         yourTeam[2].isMoving = true;
-        yourTeam[3].isMoving = true;
-        //keep the last player static
-        yourTeam[0].pointAtSprite(Flag.getEnemyFlag());
+        //keep the last 2 players static
+    for(int i = 0; i <= 2; i++){
+        if(yourTeam[i].hasFlag){
+            yourTeam[i].pointAtSprite(Flag.getYourFlag());
+        }
+        else{
+            yourTeam[i].pointAtSprite(Flag.getEnemyFlag());
+        }
+    }
     }
 
 }

@@ -70,13 +70,7 @@ public class Player extends Sprite {
             setRotation(x > other.x ? 180:0);
             return;
         }
-
-        System.out.println("x: " + x + "y: " + y);
-        System.out.println("otherX: " + other.x + ". otherY: " + other.y);
-
-        // Avoid integer division edge case.
-        double theta = Math.toDegrees(Math.atan((other.y - y) / (float)(other.x - x)));
-        System.out.println(theta);
+        double theta = Math.toDegrees(Math.atan2((other.cy() - cy()), (double)(other.cx() - cx())));
         setRotation((int)theta);
     }
     /**
@@ -106,7 +100,12 @@ public class Player extends Sprite {
         Ypoints[2] = (int) (size * Math.sin(Math.toRadians(rotation + 90))) + y;
         return Ypoints;
     }
-
+    public int cx(){
+        return x;
+    }
+    public int cy(){
+        return y;
+    }
     /**
      * Draws the player as a triangle
      */

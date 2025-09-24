@@ -30,6 +30,7 @@ public class Flag extends Sprite {
             x = collectedPlayer.x;
             y = collectedPlayer.y;
         }
+        checkCollected();
     }
     /**
      * checks if enemy team collected a flag, sets the flag isCollected if it is
@@ -39,9 +40,10 @@ public class Flag extends Sprite {
         //if the flag was collected before, that doesn't mean it's collected now...
         isCollected = false;
         //figure out who's flag current flag is
-        if(PlayerLogic.enemyTeam[0].isRed == isRed)
+        if(PlayerLogic.enemyTeam[0].isRed != isRed)
             //if it's your flag.... loop through each player on the enemies' team and check for a collision
             for(int i = 0; i < PlayerLogic.enemyTeam.length;i++){
+                System.out.println("Index: " + i);
                 if(PlayerLogic.enemyTeam[i].collide(this)){
                     isCollected = true;
                     collectedPlayer = PlayerLogic.enemyTeam[i];

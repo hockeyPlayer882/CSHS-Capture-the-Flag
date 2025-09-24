@@ -65,8 +65,8 @@ public class Sprite {
      * @return true if they collided, false otherwise
      */
     public boolean collide(Sprite other) {
-        Rectangle thisR = new Rectangle(x, y, size, size);
-        Rectangle otherR = new Rectangle(other.x, other.y, other.size, other.size);
+        Rectangle thisR = new Rectangle(cx()-size/2, cy()+size/2, size, size);
+        Rectangle otherR = new Rectangle(other.cx()-size/2, other.cy()+size/2, other.size, other.size);
         return thisR.intersects(otherR);
     }
 
@@ -102,5 +102,11 @@ public class Sprite {
     protected void draw(Graphics g) {
         // default non-image is a rectangle, will be overridden later
         g.drawRect(x, y, size, size);
+    }
+    public int cx(){
+        return x + size/2;
+    }
+    public int cy(){
+        return y - size/2;
     }
 }
