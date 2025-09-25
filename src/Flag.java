@@ -33,6 +33,7 @@ public class Flag extends Sprite {
         //if the flag hasn't been collected, check if it will be collected
         if(!isCollected)
             checkCollected();
+        scoreFlag();
     }
     /**
      * checks if enemy team collected a flag, sets the flag isCollected if it is
@@ -62,6 +63,45 @@ public class Flag extends Sprite {
             }
         return isCollected;
         
+    }
+    public void scoreFlag(){
+        if(PlayerLogic.yourTeam[0].isRed == isRed){
+            if(cx()+size/2 >=  Main.frameWidth/2){
+                setCollected(false);
+                resetFlag();
+                Main.EnemyScore++;
+            }
+        }
+        else{
+            if(cx()-size/2 <= Main.frameWidth/2){
+                setCollected(false);
+                resetFlag();
+                Main.yourScore++;
+            }
+        }
+    }
+    public void resetFlag(){
+        y = Main.frameHeight/2;//moves the flags to the correct position
+        final int offset = 50;
+        if(isRed == PlayerLogic.yourTeam[0].isRed){
+            Main.redFlag.x =offset;
+            Main.blueFlag.x = Main.frameWidth-offset; 
+        }
+        else{
+
+            Main.blueFlag.x =offset;
+            Main.redFlag.x = Main.frameWidth-offset; 
+        }
+    }
+    /**
+     * ensured 
+     * @param status
+     */
+    public void setCollected(boolean status){
+        isCollected = status;
+        if(isCollected == false){
+            collectedPlayer = null;
+        }
     }
     public static Flag getYourFlag(){
         if(PlayerLogic.yourTeam[0].isRed){

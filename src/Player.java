@@ -145,17 +145,8 @@ public class Player extends Sprite {
             PlayerLogic.enemyTeam[i] = new PlayerLogic(Main.frameWidth - 120, i * playerDelta + playerDelta / 2,
                     !youAreRed, 180);
         }
-        //moves the flags to the correct position
-        final int offset = 50;
-        if(youAreRed){
-            Main.redFlag.x =offset;
-            Main.blueFlag.x = Main.frameWidth-offset; 
-        }
-        else{
-
-            Main.blueFlag.x =offset;
-            Main.redFlag.x = Main.frameWidth-offset; 
-        }
+        Main.blueFlag.resetFlag();
+        Main.redFlag.resetFlag();
     }
 
 }

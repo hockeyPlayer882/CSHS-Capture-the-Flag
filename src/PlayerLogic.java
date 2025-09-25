@@ -52,6 +52,11 @@ public class PlayerLogic extends Player {
         else{
             yourTeam[0].pointAtSprite(yourTeam[3]);
         }
+        //normally you can't move the other team in here, that will be dealt with later
+        enemyTeam[1].isMoving = true;
+        if(!enemyTeam[1].hasFlag)
+            enemyTeam[1].pointAtSprite(Flag.getYourFlag());
+        else enemyTeam[1].pointAtSprite(enemyTeam[2]);
     }
 
 }

@@ -11,6 +11,13 @@ public class GameTimer extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Game starting");
+        //render thread needs time to figure stuff out, add delay to give it time
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("game thread started");
 
         while (true) {
@@ -27,7 +34,6 @@ public class GameTimer extends Thread {
             
             //set framerate
             try {
-                // TODO: Might need to revert to FPS / 2 tho that's technically incorrect.
                 sleep(1000 / Timer.FPS); // FPS is the reciprocal of the delta time, which is in seconds.
             } catch (InterruptedException e) {
                 e.printStackTrace();

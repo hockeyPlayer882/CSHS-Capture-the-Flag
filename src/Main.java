@@ -2,11 +2,10 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.LinkedList;
-
 //Main class must extend JPanel to work (makes Main a child of JPanel so it can to graphics stuff)
 public class Main extends JPanel {
-    public static int redScore = 0;
-    public static int blueScore = 0;
+    public static int yourScore = 0;
+    public static int EnemyScore = 0;
     //time elapsed
     Timer gameTimer = new Timer(0,2,0,2);
     // paint thread, used to draw stuff
@@ -69,7 +68,11 @@ public class Main extends JPanel {
         g.fillRect(frameWidth/2,0,frameWidth/2,frameHeight);
         g.setColor(new Color(PlayerLogic.enemyTeam[0].color.getRed(),PlayerLogic.enemyTeam[0].color.getGreen(),PlayerLogic.enemyTeam[0].color.getBlue(),128+(128/2)));
         g.fillRect(frameWidth-frameWidth/12,0,frameWidth/12,frameHeight);
-
+        g.setFont(new Font("Times New Roman", 1, 40));
+        g.setColor(PlayerLogic.yourTeam[0].color);
+        g.drawString("" + Main.yourScore,frameWidth/4,frameHeight/20);
+        g.setColor(PlayerLogic.enemyTeam[0].color);
+        g.drawString("" + Main.EnemyScore,frameWidth-frameWidth/4,frameHeight/20);
         // iterate through linkedlist (easy with enhanced for, weird without)
         for (Sprite s : renderedSprites) {
             // take care of painting stuff (see Sprite for how paint works)
