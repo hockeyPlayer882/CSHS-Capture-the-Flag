@@ -41,18 +41,17 @@ public class PlayerLogic extends Player {
         //testing cases
         yourTeam[1].setRotation(30);
         //spin?
+        yourTeam[2].setRotation(yourTeam[2].getRotation()+1);
         yourTeam[0].isMoving = true;
-        yourTeam[1].isMoving = true;
-        yourTeam[2].isMoving = true;
+        //yourTeam[1].isMoving = true;
+        //yourTeam[2].isMoving = true;
         //keep the last 2 players static
-    for(int i = 0; i <= 2; i++){
-        if(yourTeam[i].hasFlag){
-            yourTeam[i].pointAtSprite(Flag.getYourFlag());
+        if(!yourTeam[0].hasFlag){
+            yourTeam[0].pointAtSprite(Flag.getEnemyFlag());
         }
         else{
-            yourTeam[i].pointAtSprite(Flag.getEnemyFlag());
+            yourTeam[0].pointAtSprite(yourTeam[3]);
         }
-    }
     }
 
 }

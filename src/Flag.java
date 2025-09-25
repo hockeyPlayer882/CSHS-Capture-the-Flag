@@ -30,7 +30,9 @@ public class Flag extends Sprite {
             x = collectedPlayer.x;
             y = collectedPlayer.y;
         }
-        checkCollected();
+        //if the flag hasn't been collected, check if it will be collected
+        if(!isCollected)
+            checkCollected();
     }
     /**
      * checks if enemy team collected a flag, sets the flag isCollected if it is
@@ -43,10 +45,10 @@ public class Flag extends Sprite {
         if(PlayerLogic.enemyTeam[0].isRed != isRed)
             //if it's your flag.... loop through each player on the enemies' team and check for a collision
             for(int i = 0; i < PlayerLogic.enemyTeam.length;i++){
-                System.out.println("Index: " + i);
                 if(PlayerLogic.enemyTeam[i].collide(this)){
                     isCollected = true;
                     collectedPlayer = PlayerLogic.enemyTeam[i];
+                    collectedPlayer.hasFlag = true;
                 }
             }
         else
@@ -55,6 +57,7 @@ public class Flag extends Sprite {
                 if(PlayerLogic.yourTeam[i].collide(this)){
                     isCollected = true;
                     collectedPlayer = PlayerLogic.yourTeam[i];
+                    collectedPlayer.hasFlag = true;
                 }
             }
         return isCollected;
@@ -71,5 +74,15 @@ public class Flag extends Sprite {
             return Main.redFlag;
         }
         else return Main.blueFlag;
+    }
+    public String toString(){
+        String returnR = "";
+
+        returnR += "Player\n\t";
+        returnR += "Color: " + (isRed ? "Red" : "Blue") + "\n\t";
+        returnR += "Collected?:" + isCollected + "\n\t";
+        returnR += "Center: (" + cx() + "," + cy() + ")";
+
+        return returnR;
     }
 }

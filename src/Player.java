@@ -12,12 +12,6 @@ public class Player extends Sprite {
     // for trig, radians are used, but radians are more confusing to use and
     // conversions exist if needed
     private int rotation = 0;
-
-    // for smooth rotation
-    private int setRotation = 0;
-
-    // how fast should they turn?
-    private int rotationStep = 5;
     public boolean hasFlag = false;
     boolean isRed;
 
@@ -60,7 +54,7 @@ public class Player extends Sprite {
         rotation = newAngle;
     }
     public void pointAtSprite(Sprite other){
-        //if they are on the same x-axis, point straight up or down
+        /*//if they are on the same x-axis, point straight up or down
         if(x == other.x){
             setRotation(y > other.y ? 90:270);
             return;
@@ -69,8 +63,11 @@ public class Player extends Sprite {
         if(y == other.y){
             setRotation(x > other.x ? 180:0);
             return;
-        }
-        double theta = Math.toDegrees(Math.atan2((other.cy() - cy()), (double)(other.cx() - cx())));
+        }*/
+        double theta = Math.toDegrees(Math.atan2((other.cy() - cy()),(double)(other.cx() - cx())));
+        System.out.println("this:" + this);
+        System.out.println("other:" + other);
+        System.out.println("theta" + theta);
         setRotation((int)theta);
     }
     /**
