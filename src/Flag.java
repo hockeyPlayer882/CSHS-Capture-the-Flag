@@ -10,9 +10,6 @@ public class Flag extends Sprite {
     public Timer resetTimer = new Timer(0,3,0,3);
     public PlayerLogic collectedPlayer;
 
-    // Prevent the flag from being scored multiple times for one capture.
-    private boolean flagScoredWait = false;
-
     /**
      * Constructs a flag object
      * @param x x position
@@ -38,16 +35,10 @@ public class Flag extends Sprite {
         //if the flag hasn't been collected, check if it will be collected
         if (!isCollected)
             isCollected = checkCollected();
-        
-        // Avoid scoring the flag multiple times, and do the cleanup
-        // once.
-        if (flagScoredWait) {
-            setCollected(false);
-            resetFlag();
-        }
-        else
-            scoreFlagIfValid();
+
+        scoreFlagIfValid();
     }
+
     /**
      * checks if enemy team collected a flag, sets the flag isCollected if it is
      * @return true if they collected it, false otherwise
@@ -61,7 +52,6 @@ public class Flag extends Sprite {
             //if it's your flag.... loop through each player on the enemies' team and check for a collision
             for (int i = 0; i < PlayerLogic.enemyTeam.length;i++){
                 if (PlayerLogic.enemyTeam[i].collide(this)){
-                    System.out.println("Your team grabbed the flag");
                     collected = true;
                     collectedPlayer = PlayerLogic.enemyTeam[i];
                     collectedPlayer.hasFlag = true;
@@ -71,7 +61,6 @@ public class Flag extends Sprite {
             //if it's the enemies' teams flag... loop through each player on your team and check for a collision
             for (int i = 0; i < PlayerLogic.yourTeam.length;i++) {
                 if (PlayerLogic.yourTeam[i].collide(this)) {
-                    System.out.println("The enemy grabbed the flag");
                     collected = true;
                     collectedPlayer = PlayerLogic.yourTeam[i];
                     collectedPlayer.hasFlag = true;
@@ -79,25 +68,29 @@ public class Flag extends Sprite {
             }
         }
 
-        if (collected)
-            System.out.println("Somebody grabbed the flag this round!");
-
         return collected;
     }
 
     public void scoreFlagIfValid(){
-        if (PlayerLogic.yourTeam[0].isRed == isRed){
-            if (cx() + size / 2 >= Main.frameWidth / 2 && !flagScoredWait){
+        boolean scored = false;
+
+        if (PlayerLogic.yourTeam[0].isRed == isRed) {
+            if (cx() + size / 2 >= Main.frameWidth / 2) {
                 Main.EnemyScore++;
-                flagScoredWait = true;
+                scored = true;
+            }
+        }
+        else {
+            if (cx() - size/2 <= Main.frameWidth / 2) {
+                Main.yourScore++;
+                scored = true;
             }
         }
 
-        else {
-            if (cx() - size/2 <= Main.frameWidth / 2 && !flagScoredWait){
-                Main.yourScore++;
-                flagScoredWait = true;
-            }
+        // Deduplicated the above (just moved the code down here).
+        if (scored) {
+            setCollected(false);
+            resetFlag();
         }
     }
 
