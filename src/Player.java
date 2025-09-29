@@ -106,7 +106,6 @@ public class Player extends Sprite {
             if (isRed != PlayerLogic.yourTeam[i].isRed) {
                 if (collide(PlayerLogic.yourTeam[i]) && cx() > Main.frameWidth / 2) {
                     PlayerLogic.yourTeam[i].capturedTimer.resetTimer();
-                    PlayerLogic.yourTeam[i].capturedTimer.t.start();
                     PlayerLogic.yourTeam[i].hasFlag = false;
                     // bye bye player
                     PlayerLogic.yourTeam[i].x = 999;

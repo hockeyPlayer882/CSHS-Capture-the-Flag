@@ -7,7 +7,7 @@ public class Main extends JPanel {
     public static int yourScore = 0;
     public static int EnemyScore = 0;
     //time elapsed
-    Timer gameTimer = new Timer(0,2,0,2);
+    Timer gameTimer = new Timer(2,0,2,0);
     // paint thread, used to draw stuff
     public PaintThread paintThread;
 
@@ -54,6 +54,7 @@ public class Main extends JPanel {
         Player.instantiateTeams();
         instance.paintThread.start();
         t.start();
+        instance.gameTimer.t.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -74,10 +75,25 @@ public class Main extends JPanel {
         g.drawString("" + Main.yourScore,frameWidth/4,frameHeight/20);
         g.setColor(PlayerLogic.enemyTeam[0].color);
         g.drawString("" + Main.EnemyScore,frameWidth-frameWidth/4,frameHeight/20);
+        if(!GameTimer.overtime){
+            g.setColor(Color.DARK_GRAY);
+            g.drawString(gameTimer.minutes + ":" + (gameTimer.seconds/10 == 0 ? "0" + gameTimer.seconds:gameTimer.seconds),frameWidth/2-40,40);
+        }
+        else{
+            g.setColor(Color.RED);
+            g.drawString("OVERTIME!!!!!!!",frameWidth/2-"OVERTIME!!!!!!!".length()*10,40);
+        }
         // iterate through linkedlist (easy with enhanced for, weird without)
         for (Sprite s : renderedSprites) {
             // take care of painting stuff (see Sprite for how paint works)
             s.paint(g, this);
+        }
+        if(GameTimer.overtime && gameTimer.isDone){
+            g.setColor(yourScore > EnemyScore ? Flag.getYourFlag().color:Flag.getEnemyFlag().color);
+            g.fillRect(0,0,frameWidth,frameHeight);
+            g.setColor(Color.green);
+            g.setFont(new Font("Times New Roman", 1, 40));
+            g.drawString(g.getColor().getRed() ==(Color.RED.getRed()) ? "RED WINS!!":"BLUE WINS!",frameWidth/2-"RED WINS!!".length()*10,frameHeight/2);
         }
     }
 

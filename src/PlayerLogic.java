@@ -33,36 +33,38 @@ public class PlayerLogic extends Player {
     public PlayerLogic(int x, int y, boolean isRed, int direction) {
         super(x, y, isRed, direction);
     }
+
     /**
      * Write your movement logic here....
      */
     /**
      * This update method is called every frame, use it
-     * Keep in mind that move is already called every frame, so you can NOT use it here, since you will get your move speed doubled
+     * Keep in mind that move is already called every frame, so you can NOT use it
+     * here, since you will get your move speed doubled
      */
-    public void Update(){
-        //testing cases
-        yourTeam[1].setRotation(30);
-        //spin?
-        yourTeam[2].setRotation(yourTeam[2].getRotation()+1);
-        yourTeam[0].isMoving = true;
-        //yourTeam[1].isMoving = true;
-        //yourTeam[2].isMoving = true;
-        //keep the last 2 players static
-        if(!yourTeam[0].hasFlag){
-            yourTeam[0].pointAtSprite(Flag.getEnemyFlag());
-        }
-        else{
-            yourTeam[0].pointAtSprite(yourTeam[3]);
-        }
-        //normally you can't move the other team in here, that will be dealt with later
-        enemyTeam[2].isMoving=true;
-        if(yourTeam[0].hasFlag){
-            enemyTeam[1].isMoving = true;  
-            enemyTeam[1].pointAtSprite(yourTeam[0]);
-        }
-        else{
-            enemyTeam[1].isMoving = false;
+    public void Update() {
+            // testing cases (makes left team win in OT)
+            if(GameTimer.overtime){
+            yourTeam[0].isMoving = true;
+            yourTeam[1].setRotation(30);
+            // spin?
+            yourTeam[2].setRotation(yourTeam[2].getRotation() + 1);
+            // yourTeam[1].isMoving = true;
+            // yourTeam[2].isMoving = true;
+            // keep the last 2 players static
+            if (!yourTeam[0].hasFlag) {
+                yourTeam[0].pointAtSprite(Flag.getEnemyFlag());
+            } else {
+                yourTeam[0].pointAtSprite(yourTeam[3]);
+            }
+            // normally you can't move the other team in here, that will be dealt with later
+            enemyTeam[2].isMoving = true;
+            if (yourTeam[0].hasFlag) {
+                enemyTeam[1].isMoving = true;
+                enemyTeam[1].pointAtSprite(yourTeam[0]);
+            } else {
+                enemyTeam[1].isMoving = false;
+            }
         }
     }
 

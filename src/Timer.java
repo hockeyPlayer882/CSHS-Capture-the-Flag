@@ -3,7 +3,8 @@ public class Timer {
     public int seconds;
     public int miliseconds;
     // target FPS of 60
-    public static final int FPS = 60;
+    //FIXME: should be 60 FPS
+    public static int FPS = 60;
     boolean isDone = false;
     public int resetMinutes;
     public int resetSeconds;
@@ -35,7 +36,7 @@ public class Timer {
             miliseconds=60;
             }
             if (seconds < 0) {
-                seconds = 60;
+                seconds = 59;
                 minutes--;
             }
         }
