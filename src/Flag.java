@@ -9,6 +9,10 @@ public class Flag extends Sprite {
     //if 0, flag is reset
     public Timer resetTimer = new Timer(0,3,0,3);
     public PlayerLogic collectedPlayer;
+
+    // Prevent the flag from being scored multiple times for one capture.
+    private boolean flagScoredWait = false;
+
     /**
      * Constructs a flag object
      * @param x x position
@@ -17,7 +21,7 @@ public class Flag extends Sprite {
      */
     public Flag(int x, int y, boolean isRed) {
         // sets all the properties for Sprite
-        super(true, isRed ? Player.redColor : Player.blueColor, x, y, size, isRed ? "redFlag":"blueFlag");
+        super(true, isRed ? Player.redColor : Player.blueColor, x, y, size, isRed ? "redFlag" : "blueFlag");
         //nobody can collect the flag at the start
         isCollected = false;
         this.isRed = isRed;
@@ -25,15 +29,24 @@ public class Flag extends Sprite {
     /**
      * updates the flag, called every frame in the main thread
      */
-    public void Update(){
-        if(collectedPlayer != null){
+    public void Update() {
+        if (collectedPlayer != null) {
             x = collectedPlayer.x;
             y = collectedPlayer.y;
         }
+
         //if the flag hasn't been collected, check if it will be collected
-        if(!isCollected)
-            checkCollected();
-        scoreFlag();
+        if (!isCollected)
+            isCollected = checkCollected();
+        
+        // Avoid scoring the flag multiple times, and do the cleanup
+        // once.
+        if (flagScoredWait) {
+            setCollected(false);
+            resetFlag();
+        }
+        else
+            scoreFlagIfValid();
     }
     /**
      * checks if enemy team collected a flag, sets the flag isCollected if it is
@@ -41,81 +54,89 @@ public class Flag extends Sprite {
      */
     public boolean checkCollected(){
         //if the flag was collected before, that doesn't mean it's collected now...
-        isCollected = false;
-        //figure out who's flag current flag is
-        if(PlayerLogic.enemyTeam[0].isRed != isRed)
+        boolean collected = false;
+
+        // Figure out who's holding the flag currently.
+        if (PlayerLogic.enemyTeam[0].isRed != this.isRed) {
             //if it's your flag.... loop through each player on the enemies' team and check for a collision
-            for(int i = 0; i < PlayerLogic.enemyTeam.length;i++){
-                if(PlayerLogic.enemyTeam[i].collide(this)){
-                    isCollected = true;
+            for (int i = 0; i < PlayerLogic.enemyTeam.length;i++){
+                if (PlayerLogic.enemyTeam[i].collide(this)){
+                    System.out.println("Your team grabbed the flag");
+                    collected = true;
                     collectedPlayer = PlayerLogic.enemyTeam[i];
                     collectedPlayer.hasFlag = true;
                 }
             }
-        else
+        } else {
             //if it's the enemies' teams flag... loop through each player on your team and check for a collision
-            for(int i = 0; i < PlayerLogic.yourTeam.length;i++){
-                if(PlayerLogic.yourTeam[i].collide(this)){
-                    isCollected = true;
+            for (int i = 0; i < PlayerLogic.yourTeam.length;i++) {
+                if (PlayerLogic.yourTeam[i].collide(this)) {
+                    System.out.println("The enemy grabbed the flag");
+                    collected = true;
                     collectedPlayer = PlayerLogic.yourTeam[i];
                     collectedPlayer.hasFlag = true;
                 }
             }
-        return isCollected;
-        
-    }
-    public void scoreFlag(){
-        if(PlayerLogic.yourTeam[0].isRed == isRed){
-            if(cx()+size/2 >=  Main.frameWidth/2){
-                setCollected(false);
-                resetFlag();
-                Main.EnemyScore++;
-            }
         }
-        else{
-            if(cx()-size/2 <= Main.frameWidth/2){
-                setCollected(false);
-                resetFlag();
-                Main.yourScore++;
-            }
-        }
-    }
-    public void resetFlag(){
-        y = Main.frameHeight/2;//moves the flags to the correct position
-        final int offset = 50;
-        collectedPlayer = null;
-        if(isRed == PlayerLogic.yourTeam[0].isRed){
-            Main.redFlag.x =offset;
-            Main.blueFlag.x = Main.frameWidth-offset; 
-        }
-        else{
 
-            Main.blueFlag.x =offset;
-            Main.redFlag.x = Main.frameWidth-offset; 
+        if (collected)
+            System.out.println("Somebody grabbed the flag this round!");
+
+        return collected;
+    }
+
+    public void scoreFlagIfValid(){
+        if (PlayerLogic.yourTeam[0].isRed == isRed){
+            if (cx() + size / 2 >= Main.frameWidth / 2 && !flagScoredWait){
+                Main.EnemyScore++;
+                flagScoredWait = true;
+            }
+        }
+
+        else {
+            if (cx() - size/2 <= Main.frameWidth / 2 && !flagScoredWait){
+                Main.yourScore++;
+                flagScoredWait = true;
+            }
         }
     }
+
+    public void resetFlag() {
+        final int offset = 50;
+        this.y = Main.frameHeight / 2; // moves the flags to the correct position
+        this.collectedPlayer = null; // No one holds the flag anymore.
+
+        if (this.isRed)
+            this.x = PlayerLogic.yourTeam[0].isRed ? offset : Main.frameWidth - offset;
+        else
+            this.x = PlayerLogic.yourTeam[0].isRed ? Main.frameWidth - offset : offset;
+    }
+
     /**
      * ensured 
      * @param status
      */
     public void setCollected(boolean status){
         isCollected = status;
-        if(isCollected == false){
+        if(isCollected == false) {
             collectedPlayer = null;
         }
     }
+
     public static Flag getYourFlag(){
         if(PlayerLogic.yourTeam[0].isRed){
             return Main.redFlag;
         }
         else return Main.blueFlag;
     }
+
     public static Flag getEnemyFlag(){
         if(PlayerLogic.enemyTeam[0].isRed){
             return Main.redFlag;
         }
         else return Main.blueFlag;
     }
+
     public String toString(){
         String returnR = "";
 

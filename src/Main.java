@@ -20,13 +20,14 @@ public class Main extends JPanel {
     // having these changable, but it's not currently tested
     public static final int frameWidth = 1300; // WARN: School pc screens are 1366x768; be careful not to exceed this.
     public static final int frameHeight = 700;
+    // TODO: Will have to change the scaling of the window to prevent rendering issues with different frame sizes.
 
     // this is basically an arraylist, but it's faster with linear access
     // used to draw stuff
     public static LinkedList<Sprite> renderedSprites = new LinkedList<Sprite>();
     //flags (x position to be determined cuz colors are randomized)
-    public static Flag blueFlag = new Flag(0, frameHeight/2, false);
-    public static Flag redFlag = new Flag(0, frameHeight/2, true);
+    public static Flag blueFlag = new Flag(0, frameHeight / 2, false);
+    public static Flag redFlag = new Flag(0, frameHeight / 2, true);
 
     // constructor
     public Main(JFrame frame) {

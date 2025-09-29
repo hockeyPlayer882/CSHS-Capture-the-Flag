@@ -1,6 +1,6 @@
 /*
  * You will only be writing code in this class, DO NOT MESS WITH ANY OTHER CLASSES, if there's an issue that you believe is not related to your code, email 
- * Michael Middendorf and I will determine what the issue is.
+ * Michael Middendorf or open an issue on the GitHub repo and I will determine what the issue is.
  */
 //I could be mean and force everyone to search through the Player code to find all the stuff you have access to, but becuase I'm feeling nice I'll list them here...
 //Player properties:
@@ -15,6 +15,9 @@
 //      X,Y (all ints)
 //      isCollected,isRed (constant ints)
 //      size(constant int)
+//
+// Or just use Intellisense and VS Code and it'll solve those problems and more! TAB autocomplete does look
+// really good right about now.
 public class PlayerLogic extends Player {
     public static PlayerLogic[] yourTeam = new PlayerLogic[5];
     public static PlayerLogic[] enemyTeam = new PlayerLogic[5];
