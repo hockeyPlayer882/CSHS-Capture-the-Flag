@@ -83,6 +83,7 @@ public class Flag extends Sprite {
     public void resetFlag(){
         y = Main.frameHeight/2;//moves the flags to the correct position
         final int offset = 50;
+        collectedPlayer = null;
         if(isRed == PlayerLogic.yourTeam[0].isRed){
             Main.redFlag.x =offset;
             Main.blueFlag.x = Main.frameWidth-offset; 

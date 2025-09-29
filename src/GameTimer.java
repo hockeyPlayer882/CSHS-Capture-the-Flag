@@ -7,6 +7,7 @@ public class GameTimer extends Thread {
         hasStarted = false;
         isPaused = false;
         this.instance = instance;
+
     }
 
     @Override
@@ -24,7 +25,7 @@ public class GameTimer extends Thread {
             for (int i = 0; i < PlayerLogic.yourTeam.length; i++) {
                 PlayerLogic.yourTeam[i].move();
                 PlayerLogic.enemyTeam[i].move();
-                PlayerLogic.yourTeam[i].Update();
+                PlayerLogic.enemyTeam[i].Update();
                 PlayerLogic.yourTeam[i].Update();
             }
 

@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Player extends Sprite {
+    //ik I could use Color.red and Color.blue, but this also works
     public static final Color redColor = new Color(255, 0, 0);
     public static final Color blueColor = new Color(0, 0, 255);
     public static final int playerSize = 20;
@@ -14,6 +15,8 @@ public class Player extends Sprite {
     private int rotation = 0;
     public boolean hasFlag = false;
     boolean isRed;
+    Timer capturedTimer;
+    public boolean isCaptured = false;
 
     /**
      * constructs the player
@@ -31,20 +34,46 @@ public class Player extends Sprite {
         this.rotation = direction;
         // all Players start not moving
         isMoving = false;
+        capturedTimer = new Timer(0, 5, 0, 5);
+        capturedTimer.isDone = true;
+        capturedTimer.t.start();
     }
 
     /**
      * Moves the player in it's specified direction
      */
     public void move() {
-        if (isMoving) {
+
+        if (isMoving && !isCaptured) {
             x += playerSpeed * Math.cos(Math.toRadians(rotation));
             y += playerSpeed * Math.sin(Math.toRadians(rotation));
         }
+        if (isCaptured && capturedTimer.isDone) {
+            isCaptured = false;
+            final int playerDelta = Main.frameHeight / 5;
+            if (PlayerLogic.yourTeam[0].isRed == isRed) {
+                for (int i = 0; i < PlayerLogic.yourTeam.length; i++) {
+                    if (PlayerLogic.yourTeam[i].equals(this)) {
+                        x = 120;
+                        y = i * playerDelta + playerDelta / 2;
+                    }
+                }
+            } else {
+                for (int i = 0; i < PlayerLogic.enemyTeam.length; i++) {
+                    if (PlayerLogic.enemyTeam[i].equals(this)) {
+                        x = Main.frameWidth-120;
+                        y = i * playerDelta + playerDelta / 2;
+                    }
+                }
+            }
+        }
+        capturePlayer();
     }
-    public int getRotation(){
+
+    public int getRotation() {
         return rotation;
     }
+
     /**
      * tells the program to point to a specified new angle (again in degrees)
      * 
@@ -53,23 +82,54 @@ public class Player extends Sprite {
     public void setRotation(int newAngle) {
         rotation = newAngle;
     }
-    public void pointAtSprite(Sprite other){
-        /*//if they are on the same x-axis, point straight up or down
-        if(x == other.x){
-            setRotation(y > other.y ? 90:270);
-            return;
-        }
-        //if they are on the same y-axis, point straight left or right
-        if(y == other.y){
-            setRotation(x > other.x ? 180:0);
-            return;
-        }*/
-        double theta = Math.toDegrees(Math.atan2((other.cy() - cy()),(double)(other.cx() - cx())));
-        System.out.println("this:" + this);
-        System.out.println("other:" + other);
-        System.out.println("theta" + theta);
-        setRotation((int)theta);
+
+    public void pointAtSprite(Sprite other) {
+        /*
+         * //if they are on the same x-axis, point straight up or down
+         * if(x == other.x){
+         * setRotation(y > other.y ? 90:270);
+         * return;
+         * }
+         * //if they are on the same y-axis, point straight left or right
+         * if(y == other.y){
+         * setRotation(x > other.x ? 180:0);
+         * return;
+         * }
+         */
+        double theta = Math.toDegrees(Math.atan2((other.cy() - cy()), (double) (other.cx() - cx())));
+        setRotation((int) theta);
     }
+
+    public void capturePlayer() {
+        for (int i = 0; i < PlayerLogic.yourTeam.length; i++) {
+            // if this player is on the enemy team....
+            if (isRed != PlayerLogic.yourTeam[i].isRed) {
+                if (collide(PlayerLogic.yourTeam[i]) && cx() > Main.frameWidth / 2) {
+                    PlayerLogic.yourTeam[i].capturedTimer.resetTimer();
+                    PlayerLogic.yourTeam[i].capturedTimer.t.start();
+                    PlayerLogic.yourTeam[i].hasFlag = false;
+                    // bye bye player
+                    PlayerLogic.yourTeam[i].x = 999;
+                    PlayerLogic.yourTeam[i].y = 999;
+                    PlayerLogic.yourTeam[i].isCaptured = true;
+                    if(Flag.getEnemyFlag().collectedPlayer != null)
+                        Flag.getEnemyFlag().resetFlag();
+                }
+            } else {
+                if (collide(PlayerLogic.enemyTeam[i]) && cx() < Main.frameWidth / 2) {
+                    PlayerLogic.enemyTeam[i].capturedTimer.resetTimer();
+                    PlayerLogic.enemyTeam[i].hasFlag = false;
+                    // bye bye player
+                    PlayerLogic.enemyTeam[i].x = 999;
+                    PlayerLogic.enemyTeam[i].y = 999;
+                    PlayerLogic.enemyTeam[i].isCaptured = true;
+                    if(Flag.getYourFlag().collectedPlayer != null)
+                        Flag.getYourFlag().resetFlag();
+                }
+            }
+        }
+    }
+
     /**
      * Calculates the x points of the triangle
      * 
@@ -97,12 +157,15 @@ public class Player extends Sprite {
         Ypoints[2] = (int) (size * Math.sin(Math.toRadians(rotation + 90))) + y;
         return Ypoints;
     }
-    public int cx(){
+
+    public int cx() {
         return x;
     }
-    public int cy(){
+
+    public int cy() {
         return y;
     }
+
     /**
      * Draws the player as a triangle
      */
