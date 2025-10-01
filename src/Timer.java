@@ -2,10 +2,13 @@ public class Timer {
     public int minutes;
     public int seconds;
     public int miliseconds;
+
     // target FPS of 60
     //FIXME: should be 60 FPS
-    public static int FPS = 60;
+    public static int timeScalar = 1;
+    public static final int FPS = 60;
     boolean isDone = false;
+
     public int resetMinutes;
     public int resetSeconds;
     public TimerThread t;
@@ -31,10 +34,12 @@ public class Timer {
     public void decreaseTime() {
         if (!isDone) {
             miliseconds--;
-            if(miliseconds== 0){
-            seconds--;
-            miliseconds=60;
+
+            if(miliseconds == 0) {
+                seconds--;
+                miliseconds=60;
             }
+
             if (seconds < 0) {
                 seconds = 59;
                 minutes--;
@@ -56,12 +61,9 @@ public class Timer {
 
                 if (seconds == 0 && minutes == 0)
                     isDone = true;
-                try {
-                    // 60FPS = sleep for (1000 / FPS) miliseconds
-                    sleep(1000 / FPS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
+                // 60FPS = sleep for (1000 / FPS) miliseconds
+                Utils.sleep(1000 / (FPS * timeScalar));
             }
         }
     }
